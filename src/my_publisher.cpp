@@ -1,6 +1,6 @@
 #include <ros/ros.h>
 #include <dynamic_reconfigure/server.h>
-#include "/home/ubuntu/catkin_ws/src/imagetransport/cfg/cpp/image_transport_tutorial/MyStuffConfig.h"
+#include "cfg/cpp/image_transport_tutorial/MyStuffConfig.h"
 #include <image_transport/image_transport.h>
 #include <opencv2/highgui/highgui.hpp>
 #include <cv_bridge/cv_bridge.h>
