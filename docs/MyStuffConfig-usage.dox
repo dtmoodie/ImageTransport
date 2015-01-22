@@ -1,0 +1,11 @@
+\subsubsection usage Usage
+\verbatim
+<node name="image_transport_tutorial" pkg="image_transport_tutorial" type="image_transport_tutorial">
+  <param name="HeartbeatFrameRate" type="double" value="1.0" />
+  <param name="Width" type="int" value="1920" />
+  <param name="Height" type="int" value="1080" />
+  <param name="Active" type="bool" value="False" />
+  <param name="BufferSize" type="int" value="30" />
+</node>
+\endverbatim
+

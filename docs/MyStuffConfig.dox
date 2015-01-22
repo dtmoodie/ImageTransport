@@ -1,0 +1,10 @@
+\subsubsection parameters ROS parameters
+
+Reads and maintains the following parameters on the ROS server
+
+- \b "~HeartbeatFrameRate" : \b [double] Time between heartbeats in seconds. min: 0.0, default: 1.0, max: 30.0
+- \b "~Width" : \b [int] Frame Width min: 640, default: 1920, max: 1920
+- \b "~Height" : \b [int] Frame Height min: 480, default: 1080, max: 1080
+- \b "~Active" : \b [bool] Active or not min: False, default: False, max: True
+- \b "~BufferSize" : \b [int] Number of images to store in the image buffer min: 10, default: 30, max: 200
+
