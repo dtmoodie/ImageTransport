@@ -1,6 +1,6 @@
 #include <ros/ros.h>
 #include <dynamic_reconfigure/server.h>
-#include "/home/dan/catkin_ws/src/image_transport_tutorial/cfg/cpp/image_transport_tutorial/MyStuffConfig.h"
+#include "/home/ubuntu/catkin_ws/src/imagetransport/cfg/cpp/image_transport_tutorial/MyStuffConfig.h"
 #include <image_transport/image_transport.h>
 #include <opencv2/highgui/highgui.hpp>
 #include <cv_bridge/cv_bridge.h>
@@ -38,7 +38,7 @@ private:
  image_transport::ImageTransport _it;
  dynamic_reconfigure::Server<image_transport_tutorial::MyStuffConfig> _server;
  image_transport::Publisher _pub;
-
+ image_transport::Publisher _rawPub;
 };
 
 VideoBuffer::VideoBuffer(const std::string& name):_name(name), _it(_nh)
@@ -51,6 +51,8 @@ VideoBuffer::VideoBuffer(const std::string& name):_name(name), _it(_nh)
     f = boost::bind(&VideoBuffer::messageCallback, this, _1, _2);
     _server.setCallback(f);
     _pub = _it.advertise(_name, 1);
+   _rawPub = _it.advertise(_name + "_raw", 1);
+
 }
 VideoBuffer::~VideoBuffer()
 {
@@ -80,15 +82,17 @@ void VideoBuffer::acquisitionLoop()
             {
                 if(display)
                     cv::imshow(_pub.getTopic(), img);
+	        sensor_msgs::ImagePtr msg = cv_bridge::CvImage(std_msgs::Header(), "bgr8", img).toImageMsg();
+                _rawPub.publish(msg);
                 if(_active)
                 {
-                    sensor_msgs::ImagePtr msg = cv_bridge::CvImage(std_msgs::Header(), "bgr8", img).toImageMsg();
+//                    sensor_msgs::ImagePtr msg = cv_bridge::CvImage(std_msgs::Header(), "bgr8", img).toImageMsg();
                     _pub.publish(msg);
                 }else
                 {
                     if(delta.total_milliseconds() > heartBeatFrequency)
                     {
-                        sensor_msgs::ImagePtr msg = cv_bridge::CvImage(std_msgs::Header(), "bgr8", img).toImageMsg();
+  //                      sensor_msgs::ImagePtr msg = cv_bridge::CvImage(std_msgs::Header(), "bgr8", img).toImageMsg();
                         _pub.publish(msg);
                         lastTime = curTime;
                     }else
@@ -97,7 +101,10 @@ void VideoBuffer::acquisitionLoop()
                     }
                 }
             }
-            int key = cv::waitKey(5);
+
+            int key = 0;
+	    if(display)
+		key =  cv::waitKey(5);
             ros::spinOnce();
             if(key == 113)
                 break;
@@ -181,6 +188,7 @@ int main(int argc, char** argv)
         buffer.display = false;
     else
         buffer.display = true;
+    buffer.display = false;
     buffer.open(device);
 
     return 1;
