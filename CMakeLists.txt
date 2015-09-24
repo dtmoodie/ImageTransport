@@ -10,11 +10,23 @@ find_package(catkin REQUIRED COMPONENTS
     dynamic_reconfigure
 )
 generate_dynamic_reconfigure_options(cfg/MyStuff.cfg)
+LIST(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR})
 find_package(OpenCV REQUIRED core highgui)
+FIND_PACKAGE(Boost REQUIRED COMPONENTS program_options log log_setup)
 set(CMAKE_VERBOSE_MAKEFILE ON)
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
-set(CMAKE_CXX_FLAGS "-O0")
+FIND_PACKAGE(Gstreamer)
+FIND_PACKAGE(PkgConfig)
+pkg_search_module(GLIB2 glib-2.0)
+IF(GLIB2_FOUND)
+  INCLUDE_DIRECTORIES(${GSTREAMER_gst_INCLUDE_DIR})
+  INCLUDE_DIRECTORIES(${GSTREAMER_gstconfig_INCLUDE_DIR})
+  INCLUDE_DIRECTORIES(${Glib_INCLUDE_DIR})
+  INCLUDE_DIRECTORIES("/usr/lib/x86_64-linux-gnu/glib-2.0/include")
+  INCLUDE_DIRECTORIES("/usr/include/glib-2.0")
+ENDIF(GLIB2_FOUND)
+
 
 ## Uncomment this if the package has a setup.py. This macro ensures
 ## modules and global scripts declared therein get installed
@@ -97,7 +109,9 @@ catkin_package(
 # include_directories(include)
 include_directories(
   ${catkin_INCLUDE_DIRS}
+  ${CMAKE_CURRENT_SOURCE_DIR}
 )
+message(${CMAKE_CURRENT_SOURCE_DIR})
 
 ## Declare a cpp library
 # add_library(image_transport_tutorial
@@ -115,10 +129,28 @@ message("Dir: ${CMAKE_SOURCE_DIR}/image_transport_tutorial/cfg/cpp/image_transpo
 # add_dependencies(image_transport_tutorial_node image_transport_tutorial_generate_messages_cpp)
 
 ## Specify libraries to link a library or executable target against
- target_link_libraries(my_publisher
-   ${catkin_LIBRARIES}
-	opencv_highgui
-	opencv_core
+target_link_libraries(my_publisher
+  ${catkin_LIBRARIES}
+  opencv_highgui
+  opencv_core
+  ${GSTREAMER_gstapp_LIBRARY}
+  ${GSTREAMER_gstaudio_LIBRARY}
+  ${GSTREAMER_gstbase_LIBRARY}
+  ${GSTREAMER_gstcontroller_LIBRARY}
+  ${GSTREAMER_gstpbutils_LIBRARY}
+  ${GSTREAMER_gstreamer_LIBRARY}
+  ${GSTREAMER_gstriff_LIBRARY}
+  ${GSTREAMER_gstrtp_LIBRARY}
+  ${GSTREAMER_gstrtsp_LIBRARY}
+  ${GSTREAMER_gstsdp_LIBRARY}
+  ${GSTREAMER_gsttag_LIBRARY}
+  ${GSTREAMER_gstvideo_LIBRARY}
+  ${Glib_LIBRARY}
+  ${GOBJECT_LIBRARY}
+  /usr/lib/x86_64-linux-gnu/libgobject-2.0.so
+  /usr/lib/x86_64-linux-gnu/libglib-2.0.so
+  ${Boost_LIBRARIES}
+
  )
 
 #############
