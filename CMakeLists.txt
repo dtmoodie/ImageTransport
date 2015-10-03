@@ -23,7 +23,7 @@ IF(GLIB2_FOUND)
   INCLUDE_DIRECTORIES(${GSTREAMER_gst_INCLUDE_DIR})
   INCLUDE_DIRECTORIES(${GSTREAMER_gstconfig_INCLUDE_DIR})
   INCLUDE_DIRECTORIES(${Glib_INCLUDE_DIR})
-  INCLUDE_DIRECTORIES("/usr/lib/x86_64-linux-gnu/glib-2.0/include")
+  INCLUDE_DIRECTORIES("/usr/lib/arm-linux-gnueabihf/glib-2.0/include")
   INCLUDE_DIRECTORIES("/usr/include/glib-2.0")
 ENDIF(GLIB2_FOUND)
 
@@ -147,8 +147,8 @@ target_link_libraries(my_publisher
   ${GSTREAMER_gstvideo_LIBRARY}
   ${Glib_LIBRARY}
   ${GOBJECT_LIBRARY}
-  /usr/lib/x86_64-linux-gnu/libgobject-2.0.so
-  /usr/lib/x86_64-linux-gnu/libglib-2.0.so
+  /usr/lib/arm-linux-gnueabihf/libgobject-2.0.so
+  /usr/lib/arm-linux-gnueabihf/libglib-2.0.so
   ${Boost_LIBRARIES}
 
  )
